@@ -4,6 +4,7 @@ import Backbone from "backbone";
 import context from "context";
 import featureFlags from "utilities/featureFlags";
 import SelectMenu from "components/common/ui/SelectMenu";
+import {RadioButton, RadioButtonGroup} from "material-ui/RadioButton";
 
 export default React.createClass({
     propTypes: {
@@ -13,6 +14,8 @@ export default React.createClass({
         identity: React.PropTypes.instanceOf(Backbone.Model),
         identityList: React.PropTypes.instanceOf(Backbone.Collection),
         project: React.PropTypes.instanceOf(Backbone.Model),
+        onProvisionOptionChange: React.PropTypes.func,
+        provisionOption: React.PropTypes.string,
         image: React.PropTypes.instanceOf(Backbone.Model),
         instanceName: React.PropTypes.string,
         onNameChange: React.PropTypes.func,
@@ -59,9 +62,12 @@ export default React.createClass({
             project,
             projectList,
             instanceName,
+            provisionOption,
+            onProvisionOptionChange,
             showValidationErr,
             waitingOnLaunch
         } = this.props;
+
         let hasErrorClass;
         let errorMessage = null;
 
@@ -136,6 +142,29 @@ export default React.createClass({
                     <p className="t-caption" style={{display: "block"}}>
                         {projectType}
                     </p>
+                </div>
+                <div className="form-group">
+                    <label htmlFor="provision-options">
+                        Provisioning Options
+                    </label>
+                    <RadioButtonGroup
+                        name="provision-options"
+                        valueSelected={provisionOption}
+                        onChange={onProvisionOptionChange}>
+                        <RadioButton
+                            value="full-provision"
+                            label="Full Provision (Recomended)"
+                        />
+                        <RadioButton
+                            value="min-provision"
+                            label={
+                                <span>
+                                    Minimum Provision <br /> (This might break
+                                    functionality)
+                                </span>
+                            }
+                        />
+                    </RadioButtonGroup>
                 </div>
             </form>
         );
